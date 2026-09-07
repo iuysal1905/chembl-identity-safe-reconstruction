@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Historical databases and large derived data
+data/archives/*
+data/cache/*
+data/extracted/*
+data/interim/*
+data/external/*
+!data/**/.gitkeep
+*.sqlite
+*.sqlite3
+*.db
+*.parquet
+
+# Generated results
+results/audit/*
+results/tables/*
+results/figures/*
+results/paper/*
+!results/**/.gitkeep
+
+# Local logs
+*.log
+logs/

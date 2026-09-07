@@ -1,0 +1,26 @@
+{
+  "repository": "chembl-identity-safe-reconstruction",
+  "built_utc": "2026-09-07T11:39:38.980450+00:00",
+  "first_availability_sha256": "900bcf3dd842c976952a43d0092b1af773c684d33632a45961183c418324a51a",
+  "paper_release_range": "CHEMBL01-CHEMBL31",
+  "copied_test_files": [
+    "test_archive_download.py",
+    "test_chembl_adapter.py",
+    "test_first_availability.py",
+    "test_identity_external_constraint_v15l.py",
+    "test_identity_policy_v15f.py",
+    "test_identity_reconciliation_regressions.py",
+    "test_identity_undermerge_policy_v15g.py",
+    "test_identity_undermerge_regression.py",
+    "test_legacy_schema.py",
+    "test_multicomponent_policy.py",
+    "test_pre15_multitarget_policy_v15k.py",
+    "test_pre9_schema.py",
+    "test_releases.py",
+    "test_standardize.py",
+    "test_temporal.py",
+    "test_units.py",
+    "test_paper_analysis.py"
+  ],
+  "tests_run": true
+}

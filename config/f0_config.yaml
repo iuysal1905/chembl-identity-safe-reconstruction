@@ -1,0 +1,170 @@
+project:
+  name: AD Temporal Router-CP F0
+  version: 1.9.0
+  protocol_version: v1.5
+  implementation_lock: v1.5l
+  analysis_freeze_date: '2026-08-10'
+paths:
+  release_manifest: config/chembl_release_manifest.csv
+  release_date_overrides: config/release_date_overrides.csv
+  archives_dir: data/archives
+  extracted_dir: data/extracted
+  interim_dir: data/interim
+  external_dir: data/external
+  cache_dir: data/cache
+  tables_dir: results/tables
+  figures_dir: results/figures
+  audit_dir: results/audit
+  logs_dir: logs
+  structure_cache_db: data/cache/structure_standardization_cache.sqlite
+chembl:
+  require_exact_release_dates: true
+  current_api_for_historical_reconstruction: false
+  endpoints:
+  - IC50
+  - Ki
+  primary_endpoint: IC50
+  relation_allowlist:
+  - '='
+  - <
+  - '>'
+  extraction_min_confidence_score: 8
+  primary_confidence_score: 9
+  sensitivity_min_confidence_score: 8
+  primary_assay_type: B
+  target_type: SINGLE PROTEIN
+  historical_native_target_type_equivalent:
+    pre9_early: PROTEIN
+    pre15_legacy: PROTEIN
+    post15: SINGLE PROTEIN
+  organism: Homo sapiens
+  expert2_target_cap: 256
+  expert2_min_unique_exact_e_molecules: 100
+  expert2_backtest_A_min_nonpanel_targets: 20
+  expert2_backtest_A_min_exact_observations: 5000
+  expert2_backtest_A_min_unique_molecules: 2000
+  schema_probe_releases:
+  - CHEMBL02
+  - CHEMBL09
+  - CHEMBL17
+  legacy_primary_relationship_type: D
+  legacy_sensitivity_relationship_types:
+  - D
+  - H
+  multicomponent_exclusion_max_fraction: 0.001  # post15 only
+  pre15_multitarget_assay_policy: exclude_entire_native_assay_no_threshold
+  broad_prior_knowledge_assay_types: ALL
+  curation_lag_exclude_left_censored_from_main: true
+  schema_probe_expected_generation:
+    CHEMBL02: pre9_early
+    CHEMBL09: pre15_legacy
+    CHEMBL17: post15
+  official_all_release_sqlite_only: true
+  pre9_reference_bridge_release: CHEMBL09
+  pre9_historical_high_confidence_value: 7
+  pre9_primary_relationship_type: D
+  pre9_relaxed_relationship_types:
+  - D
+  - H
+  pre9_require_relationship_type_for_primary: true
+  pre9_extraction_floor: detected_confidence_regime
+panel:
+  BACE1: P56817
+  ACHE: P22303
+  MAOB: P27338
+  GSK3B: P49841
+backtests:
+  A:
+    E_end: '2010-01-01'
+    R_start: '2010-01-01'
+    R_end: '2012-01-01'
+    C_start: '2012-01-01'
+    C_end: '2014-01-01'
+    P_start: '2014-01-01'
+    P_end: '2017-01-01'
+  B:
+    E_end: '2013-01-01'
+    R_start: '2013-01-01'
+    R_end: '2015-01-01'
+    C_start: '2015-01-01'
+    C_end: '2017-01-01'
+    P_start: '2017-01-01'
+    P_end: '2020-01-01'
+  C:
+    E_end: '2016-01-01'
+    R_start: '2016-01-01'
+    R_end: '2018-01-01'
+    C_start: '2018-01-01'
+    C_end: '2020-01-01'
+    P_start: '2020-01-01'
+    P_end: '2023-01-01'
+reserved_confirmatory:
+  anchor: 2019
+  E_end: '2019-01-01'
+  R_start: '2019-01-01'
+  R_end: '2021-01-01'
+  C_start: '2021-01-01'
+  C_end: '2023-01-01'
+  P_start: '2023-01-01'
+  P_end: '2026-01-01'
+  earliest_open_date: '2029-01-01'
+  sealed: true
+gates:
+  E:
+    min_unique_exact_molecules_per_target: 100
+    min_documents_per_target: 30
+  R:
+    min_pooled_exact_observations: 200
+    min_exact_observations_per_target: 40
+    min_documents_per_target: 15
+  C:
+    min_pooled_exact_observations: 150
+    min_exact_observations_per_target: 30
+    min_documents_per_target: 10
+  P:
+    min_pooled_exact_pairs: 300
+    min_exact_pairs_per_target: 50
+    min_documents_per_target: 20
+  min_intersection_targets: 3
+molecule_standardization:
+  retain_principal_organic_component: true
+  remove_salts: true
+  normalize_charges: true
+  preserve_stereochemistry: true
+  canonicalize_tautomer: true
+  identity: full_inchikey
+  algorithm_policy_version: F0-structure-v1.5i-r1
+  persistent_content_addressed_cache: true
+orange_book:
+  products_txt: data/external/Products.txt
+  single_ingredient_only: true
+  pre_1982_phrase: Approved Prior to Jan 1, 1982
+  pre_1982_cutoff: '1982-01-01'
+  approval_eligibility_cutoff: E_end
+  mapping_manual_table: config/orangebook_manual_mapping.csv
+release_matching:
+  value_round_sigfigs: 12
+  duplicate_resolution: collapse_same_release_identical_composite_key_keep_stable_first_and_log_multiplicity
+  pair_definition: standardized_full_inchikey_target_endpoint
+  composite_key_fields:
+  - assay_identity_key
+  - full_inchikey
+  - standard_type
+  - standard_relation
+  - standard_value_molar
+  - target_accession
+identity_reconciliation:
+  internal_id_weak_only_multiplicity_max_fraction: 0.01
+  weak_document_alias_rule: year_plus_title_OR_year_plus_journal_plus_first_page_OR_journal_plus_volume_plus_first_page
+  external_document_ids:
+  - DOI
+  - PMID
+  external_assay_ids:
+  - source_assay_id
+  internal_chembl_id_multiplicity: audit_only_unless_weak_only_family_fraction_exceeds_threshold
+  release_local_only_max_fraction: 0.01
+  release_local_policy_min_releases_per_family: 2
+  overmerge_rate_denominator_excludes_release_local_only_components: true
+  weak_alias_external_identity_constraint: hard_veto
+  weak_alias_conflict_resolution: quarantine_all_weak_aliases_in_conflicted_component_and_rebuild
+  strong_external_conflict_after_weak_quarantine: fail_closed

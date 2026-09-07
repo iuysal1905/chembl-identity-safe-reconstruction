@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chembl-identity-safe-reconstruction"
+version = "1.0.0"
+description = "Identity-safe longitudinal reconstruction and first-availability analysis across historical ChEMBL releases"
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=2.2,<3",
+  "numpy>=2.0,<3",
+  "pyarrow>=16",
+  "PyYAML>=6",
+  "requests>=2.31",
+  "rdkit>=2024.03",
+  "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "jupyter>=1.0", "nbformat>=5.10"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
